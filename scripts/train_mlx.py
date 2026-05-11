@@ -74,10 +74,11 @@ def run_training(model_path: str):
         "--batch-size", "4",
         "--lora-layers", "16",
         "--learning-rate", "1e-5",
-        "--adapter-path", str(ROOT / "outputs" / "aya-expanse-8b-finetuned"),
+        "--adapter-path", str(ROOT / "outputs" / "finetuned-adapter"),
         "--val-batches", "25",
         "--save-every", "500",
         "--grad-checkpoint",
+        "--seed", "42",
     ]
     print("Starting MLX LoRA training...")
     subprocess.run(cmd, check=True)
