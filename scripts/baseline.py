@@ -25,7 +25,6 @@ import argparse
 import pandas as pd  # type: ignore
 from pathlib import Path
 from tqdm import tqdm  # type: ignore
-from collections import defaultdict
 
 ROOT = Path(__file__).parent.parent
 sys.path.insert(0, str(ROOT))
@@ -34,9 +33,8 @@ SEED = 42
 random.seed(SEED)
 
 from src.data import load_val, build_train_index
-from src.rag import get_context
 from src.evaluate import compute_rouge
-from src.length_config import MEDIAN_LENGTH_BY_SUBSET, get_token_bounds
+from src.length_config import get_token_bounds
 from config import LANGUAGE_MAP, OUTPUT_DIR
 
 BASELINE_DIR = OUTPUT_DIR / "baselines"
@@ -140,7 +138,7 @@ def run_experiment(exp_id: str, df: pd.DataFrame, train_idx: dict) -> dict:
             prompt = build_prompt(row["input"], row["subset"], ctx)
 
             if cfg["length_cal"]:
-                _, max_tok = get_token_bounds(row["subset"])
+                _, max_tok = get_token_bounds(row["subset"], conservative=True)
             else:
                 max_tok = 512
 
