@@ -62,13 +62,13 @@ python -c "import mlx.core as mx; print(f'MLX OK. Default device: {mx.default_de
 echo "[6/6] Downloading models (20-40 min depending on bandwidth)..."
 mkdir -p models
 
-echo "  → Aya Expanse 32B 4-bit (~18GB)"
-hf download mlx-community/aya-expanse-32b-4bit \
-    --local-dir ./models/aya-expanse-32b-4bit
+echo "  → Aya Expanse 32B 8-bit (~32GB) — no 4bit available, 512GB RAM handles 8bit"
+hf download mlx-community/aya-expanse-32b-8bit \
+    --local-dir ./models/aya-expanse-32b-8bit
 
-echo "  → Llama 3.3 70B Instruct 4-bit (~40GB)"
-hf download mlx-community/Meta-Llama-3.3-70B-Instruct-4bit \
-    --local-dir ./models/Meta-Llama-3.3-70B-Instruct-4bit
+echo "  → Llama 3.3 70B Instruct 4-bit (~35GB)"
+hf download mlx-community/Llama-3.3-70B-Instruct-4bit \
+    --local-dir ./models/Llama-3.3-70B-Instruct-4bit
 
 # Prepare training data
 echo "Preparing training data..."

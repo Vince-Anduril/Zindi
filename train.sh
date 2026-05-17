@@ -12,7 +12,7 @@ fi
 source .venv/bin/activate
 
 # Use absolute paths — mlx-lm rejects relative paths
-MODEL=${MODEL:-"$PWD/models/aya-expanse-32b-4bit"}
+MODEL=${MODEL:-"$PWD/models/aya-expanse-32b-8bit"}
 ADAPTER=${ADAPTER:-"$PWD/outputs/finetuned-adapter"}
 
 if [[ ! -d "$MODEL" ]]; then
