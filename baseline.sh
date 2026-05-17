@@ -1,8 +1,15 @@
 #!/bin/bash
 # Phase 0 — Run all 6 baseline experiments before any fine-tuning.
-# Should take ~2-3h on Mac Studio M2 Ultra.
-# Run AFTER setup.sh has installed mlx-lm and downloaded models.
+# Should take ~1-2h on Mac Studio M4 Ultra.
 set -e
+
+if [[ ! -d .venv ]]; then
+    echo "ERROR: .venv not found. Run 'bash setup.sh' first."
+    exit 1
+fi
+
+# shellcheck disable=SC1091
+source .venv/bin/activate
 
 echo "=== Phase 0: Baseline measurement ==="
 echo "Running 6 experiments on 200 stratified val samples..."
@@ -11,7 +18,3 @@ PYTHONPATH=. python scripts/baseline.py --all --n 200
 
 echo ""
 echo "=== Done. Check outputs/baselines/summary.json ==="
-echo "Next step depends on results. The best experiment tells us:"
-echo "  - Which model to fine-tune (Aya 32B or Llama 70B)"
-echo "  - Whether RAG context helps"
-echo "  - Whether length calibration matters"
