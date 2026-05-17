@@ -1,7 +1,7 @@
 #!/bin/bash
 # Generate submission with fine-tuned model.
-# Usage: bash infer.sh            # uses fine-tuned adapter
-#        bash infer.sh --no-adapter  # uses base model only
+# Usage: bash infer.sh                  # uses fine-tuned adapter
+#        bash infer.sh --no-adapter     # base model only
 set -e
 
 if [[ ! -d .venv ]]; then
@@ -12,15 +12,24 @@ fi
 # shellcheck disable=SC1091
 source .venv/bin/activate
 
-MODEL=${MODEL:-./models/aya-expanse-32b-4bit}
-ADAPTER=${ADAPTER:-./outputs/finetuned-adapter}
+# Use absolute paths — mlx-lm rejects relative paths
+MODEL=${MODEL:-"$PWD/models/aya-expanse-32b-4bit"}
+ADAPTER=${ADAPTER:-"$PWD/outputs/finetuned-adapter"}
+
+if [[ ! -d "$MODEL" ]]; then
+    echo "ERROR: Model directory not found: $MODEL"
+    echo "Run 'bash setup.sh' first to download models."
+    exit 1
+fi
 
 echo "=== Generating submission ==="
+
+mkdir -p outputs
 
 PYTHONPATH=. python scripts/infer_mlx.py \
     --model "$MODEL" \
     --adapter "$ADAPTER" \
-    --output ./outputs/submission_final.csv \
+    --output "$PWD/outputs/submission_final.csv" \
     "$@"
 
 echo "=== Done ==="

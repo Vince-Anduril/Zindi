@@ -53,12 +53,15 @@ def main():
 
     from mlx_lm import load, generate
 
-    print(f"Loading model: {args.model}")
+    # Resolve to absolute path — mlx-lm rejects relative paths
+    model_path = str(Path(args.model).resolve())
+    print(f"Loading model: {model_path}")
     if not args.no_adapter and Path(args.adapter).exists():
-        model, tokenizer = load(args.model, adapter_path=args.adapter)
-        print(f"Loaded adapter from {args.adapter}")
+        adapter_path = str(Path(args.adapter).resolve())
+        model, tokenizer = load(model_path, adapter_path=adapter_path)
+        print(f"Loaded adapter from {adapter_path}")
     else:
-        model, tokenizer = load(args.model)
+        model, tokenizer = load(model_path)
         print("Loaded base model (no adapter)")
 
     test = load_test()

@@ -1,6 +1,6 @@
 #!/bin/bash
 # Fine-tune with LoRA. Defaults to Aya Expanse 32B 4-bit.
-# Override with: MODEL=./models/Meta-Llama-3.3-70B-Instruct-4bit bash train.sh
+# Override: MODEL=$PWD/models/Meta-Llama-3.3-70B-Instruct-4bit bash train.sh
 set -e
 
 if [[ ! -d .venv ]]; then
@@ -11,8 +11,15 @@ fi
 # shellcheck disable=SC1091
 source .venv/bin/activate
 
-MODEL=${MODEL:-./models/aya-expanse-32b-4bit}
-ADAPTER=${ADAPTER:-./outputs/finetuned-adapter}
+# Use absolute paths — mlx-lm rejects relative paths
+MODEL=${MODEL:-"$PWD/models/aya-expanse-32b-4bit"}
+ADAPTER=${ADAPTER:-"$PWD/outputs/finetuned-adapter"}
+
+if [[ ! -d "$MODEL" ]]; then
+    echo "ERROR: Model directory not found: $MODEL"
+    echo "Run 'bash setup.sh' first to download models."
+    exit 1
+fi
 
 echo "=== Fine-tuning ==="
 echo "Model:   $MODEL"
@@ -20,10 +27,10 @@ echo "Adapter: $ADAPTER"
 
 mkdir -p outputs
 
-PYTHONPATH=. python -m mlx_lm.lora \
+PYTHONPATH=. python -m mlx_lm lora \
     --model "$MODEL" \
     --train \
-    --data ./outputs/mlx_data \
+    --data "$PWD/outputs/mlx_data" \
     --iters 3000 \
     --batch-size 4 \
     --num-layers 16 \

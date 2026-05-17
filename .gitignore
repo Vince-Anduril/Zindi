@@ -4,5 +4,9 @@ __pycache__/
 .DS_Store
 outputs/
 models/
+.venv/
 *.egg-info/
 .env
+
+# Keep data/ tracked
+!data/

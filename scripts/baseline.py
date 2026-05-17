@@ -40,10 +40,11 @@ from config import LANGUAGE_MAP, OUTPUT_DIR
 BASELINE_DIR = OUTPUT_DIR / "baselines"
 BASELINE_DIR.mkdir(parents=True, exist_ok=True)
 
-# Pre-quantized 4-bit MLX models (fast download, fast inference)
+# Pre-quantized 4-bit MLX models — use absolute local paths
+# (mlx-lm rejects relative paths via HFValidationError)
 MODELS = {
-    "aya32b": "mlx-community/aya-expanse-32b-4bit",
-    "llama70b": "mlx-community/Meta-Llama-3.3-70B-Instruct-4bit",
+    "aya32b":   str(ROOT / "models" / "aya-expanse-32b-4bit"),
+    "llama70b": str(ROOT / "models" / "Meta-Llama-3.3-70B-Instruct-4bit"),
 }
 
 EXPERIMENTS = {
